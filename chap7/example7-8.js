@@ -1,15 +1,19 @@
-var   fs = require("fs"),
-      https = require("https");
+'use strict';
 
-var privateKey = fs.readFileSync('site.key').toString();
-var certificate = fs.readFileSync('final.crt').toString();
+// creating a very simple https server
+const fs = require('fs');
+const https = require('https');
 
-var options = {
-   key: privateKey,
-   cert: certificate
+let options = {
+  key: fs.readFileSync('key-cert/site.key').toString(),
+  cert: fs.readFileSync('key-cert/final.crt').toString(),
 };
 
-https.createServer(options, function(req,res) {
-   res.writeHead(200);
-   res.end("Hello Secure World\n");
+const server = https.createServer(options, (req, res) => {
+  res.writeHead(200, {'Content-Type': 'text/html'});
+  res.end('Hello Secure World<br />');
 }).listen(443);
+
+server.on('error', (err) => {
+  console.log(err);
+});
