@@ -1,14 +1,17 @@
-var dgram = require('dgram');
+'use strict';
 
-var client = dgram.createSocket("udp4");
+// a datagram client
+const dgram = require('dgram');
 
-process.stdin.on('data', function (data) {
-   console.log(data.toString('utf8'));
-   client.send(data, 0, data.length, 8124, "examples.burningbird.net",
-      function (err, bytes) {
-        if (err)
-          console.error('error: ' + err);
-        else
-          console.log('successful');
+const client = dgram.createSocket('udp4');
+
+process.stdin.on('data', (data) => {
+   client.send(data, 0, data.length, 8124, 'localhost', (err, bytes) => {
+      if (err) {
+        console.error('error: ' + err);
+      }
+      else {
+        console.log('successful');
+      }
    });
 });
