@@ -1,9 +1,14 @@
+// connecting to the unix socket and printing out received data
 var net = require('net');
+var os = require('os');
+
 var client = new net.Socket();
 client.setEncoding('utf8');
 
+var unixSocket = os.homedir() + '/node.sock';
+
 // connect to server
-client.connect ('/home/somepath/nodesocket', function () {
+client.connect (unixSocket, function () {
    console.log('connected to server');
    client.write('Who needs a browser to communicate?');
 });
@@ -23,3 +28,7 @@ client.on('close',function() {
    console.log('connection is closed');
 });
 
+client.on('error', (err) => {
+    console.log(err);
+    process.exit();
+});
